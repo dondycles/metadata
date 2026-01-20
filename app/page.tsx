@@ -33,7 +33,7 @@ const formSchema = z.object({
   sheetCode: z.string().trim(),
   midiCode: z.string().trim(),
   walkthroughLink: z.url().trim(),
-  difficulty: z.enum(["Beginner", "Intermidiate", "Advanced"]),
+  difficulty: z.enum(["Beginner", "Intermediate", "Advanced"]),
 });
 import useMeasure from "react-use-measure";
 import { Badge } from "@/components/ui/badge";
@@ -63,7 +63,7 @@ export default function Home() {
       midiCode: "",
       sheetCode: "",
       walkthroughLink: "",
-      difficulty: "Intermidiate",
+      difficulty: "Intermediate",
     },
   });
 
@@ -194,7 +194,7 @@ export default function Home() {
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
                         <SelectContent position="item-aligned">
-                          {["Beginner", "Intermidiate", "Advanced"].map((d) => (
+                          {["Beginner", "Intermediate", "Advanced"].map((d) => (
                             <SelectItem
                               className="capitalize"
                               key={d}
