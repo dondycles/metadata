@@ -58,11 +58,11 @@ export default function Home() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "Until I Found You",
-      artists: "Stephen Sanchez",
-      midiCode: "ucTam",
-      sheetCode: "64730",
-      walkthroughLink: "https://youtu.be/ihtxf1eMza8",
+      title: "",
+      artists: "",
+      midiCode: "",
+      sheetCode: "",
+      walkthroughLink: "",
       difficulty: "Intermidiate",
     },
   });
