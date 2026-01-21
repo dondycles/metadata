@@ -319,6 +319,11 @@ export default function Home() {
                   </a>
                   <br />
                   <br />
+                  📩 INQUIRIES? CONTACT ME!
+                  <br />
+                  📧 johnroddondoyano8@gmail.com
+                  <br />
+                  <br />
                   👨‍🏫 WANT TO LEARN THIS ARRANGEMENT?
                   <br />
                   Watch the piano tutorial / walkthrough here:
@@ -388,11 +393,6 @@ export default function Home() {
                   If you’d like to support my work:
                   <br />
                   👉 Buy Me A Coffee: https://www.buymeacoffee.com/johnrod
-                  <br />
-                  <br />
-                  📩 CONTACT
-                  <br />
-                  📧 johnroddondoyano8@gmail.com
                   <br />
                   <br />
                   📌 SUBSCRIBE
