@@ -32,7 +32,7 @@ const formSchema = z.object({
   artists: z.string().trim(),
   sheetCode: z.string().trim(),
   midiCode: z.string().trim(),
-  walkthroughLink: z.url().trim(),
+  walkthroughCode: z.url().trim(),
   difficulty: z.enum(["Beginner", "Intermediate", "Advanced"]),
 });
 import useMeasure from "react-use-measure";
@@ -42,7 +42,6 @@ import {
   ButtonGroup,
   ButtonGroupSeparator,
 } from "@/components/ui/button-group";
-
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [ref, bounds] = useMeasure();
@@ -62,7 +61,7 @@ export default function Home() {
       artists: "",
       midiCode: "",
       sheetCode: "",
-      walkthroughLink: "",
+      walkthroughCode: "",
       difficulty: "Intermediate",
     },
   });
@@ -72,7 +71,7 @@ export default function Home() {
   const MMFCODE = form.watch("sheetCode");
   const PAYHIPCODE = form.watch("midiCode");
   const DIFFICULTY = form.watch("difficulty");
-  const WALKTHROUGHLINK = form.watch("walkthroughLink");
+  const WALKTHROUGHLINK = form.watch("walkthroughCode");
 
   const copyToClipboard = async (elementId: string, type: string) => {
     const text = document.getElementById(elementId)?.innerText;
@@ -153,6 +152,7 @@ export default function Home() {
                     </Field>
                   )}
                 />
+
                 <Controller
                   control={form.control}
                   name="midiCode"
@@ -162,6 +162,26 @@ export default function Home() {
                       <Input
                         id={field.name}
                         placeholder="'aBxDe'"
+                        {...field}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+                <Controller
+                  control={form.control}
+                  name="walkthroughCode"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        Walkthrough Code
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        placeholder="'ijaoxf5x8Xw'"
                         {...field}
                         aria-invalid={fieldState.invalid}
                       />
@@ -205,26 +225,6 @@ export default function Home() {
                           ))}
                         </SelectContent>
                       </Select>
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="walkthroughLink"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Walkthrough YT Link
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="https://youtu.be/ijaoxf5x8Xw"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
                     </Field>
                   )}
                 />
@@ -303,36 +303,41 @@ export default function Home() {
                   🎹 Piano Sheet Music:{" "}
                   <a
                     target="_blank"
-                    href={`https://sheets.jrdy.link/${MMFCODE ? MMFCODE : "[CODE]"}`}
+                    href={`https://sheets.jrdy.link/${MMFCODE ? MMFCODE : null}`}
                   >
                     https://sheets.jrdy.link/
-                    {MMFCODE ? MMFCODE : "[CODE]"}
+                    {MMFCODE ? MMFCODE : null}
                   </a>
                   <br />
                   🎹 MIDI / MXL Files:{" "}
                   <a
                     target="_blank"
-                    href={`https://midis.jrdy.link/${PAYHIPCODE ? PAYHIPCODE : "[CODE]"}`}
+                    href={`https://midis.jrdy.link/${PAYHIPCODE ? PAYHIPCODE : null}`}
                   >
                     https://midis.jrdy.link/
-                    {PAYHIPCODE ? PAYHIPCODE : "[CODE]"}
+                    {PAYHIPCODE ? PAYHIPCODE : null}
                   </a>
                   <br />
                   <br />
-                  {WALKTHROUGHLINK ? (
-                    <>
-                      👨‍🏫 WANT TO LEARN THIS ARRANGEMENT?
-                      <br />
-                      Watch the piano tutorial / walkthrough here:
-                      <br />
-                      👉{" "}
-                      <a target="_blank" href={WALKTHROUGHLINK}>
-                        {WALKTHROUGHLINK}
-                      </a>
-                      <br />
-                      <br />
-                    </>
-                  ) : null}
+                  👨‍🏫 WANT TO LEARN THIS ARRANGEMENT?
+                  <br />
+                  Watch the piano tutorial / walkthrough here:
+                  <br />
+                  👉{" "}
+                  <a
+                    target="_blank"
+                    href={
+                      WALKTHROUGHLINK
+                        ? `https://youtu.be/${WALKTHROUGHLINK}`
+                        : "https://www.youtube.com/@sheetsby_jr"
+                    }
+                  >
+                    {WALKTHROUGHLINK
+                      ? `https://youtu.be/${WALKTHROUGHLINK}`
+                      : "https://www.youtube.com/@sheetsby_jr"}
+                  </a>
+                  <br />
+                  <br />
                   🎵 ABOUT THIS PIANO ARRANGEMENT
                   <br />
                   Instrument: Solo Piano
@@ -445,7 +450,7 @@ export default function Home() {
 
              Title: ${TITLE} – Piano Cover | ${ARTISTS} (Sheet Music)
              Description: ${text}
-             
+
              Ensure tags include a mix of broad category terms and specific long-tail keywords in small caps only except with titles and artist names. Also, always add "john rod dondoyano". No duplications please. No more than 500 characters but not less than 400 characters overall.`);
                       }}
                     >
