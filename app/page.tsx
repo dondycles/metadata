@@ -272,6 +272,9 @@ export default function Home() {
               className="relative flex flex-col gap-4"
             >
               <div className="flex-4 overflow-auto pb-14 bg-muted rounded-2xl p-4 border">
+                <span className="font-bold text-lg">Description</span>
+                <br />
+                <br />
                 <p className="text-base" id="result">
                   🎹 {TITLE ? TITLE : "[TITLE]"} – Piano Cover |{" "}
                   {ARTISTS ? ARTISTS : "[ARTIST(S)]"}
@@ -429,7 +432,7 @@ export default function Home() {
               </div>
               <div className="flex-1 flex flex-col gap-4 place-items-start overflow-hidden bg-muted p-4 rounded-2xl border">
                 <div className="flex gap-4 justify-between w-full">
-                  <span className="font-bold text-lg">Tags Generator</span>
+                  <span className="font-bold text-lg">Tags</span>
                   <ButtonGroup className="rounded-3xl">
                     <Button
                       disabled={
