@@ -90,12 +90,12 @@ export default function Home() {
   }, []);
   if (!mounted) return;
   return (
-    <div className="min-h-dvh bg-zinc-50 font-sans dark:bg-black flex flex-col gap-4 px-4 sm:px-12 py-12">
-      <div className="space-y-6 border px-4 py-6 rounded-4xl">
-        <ResizablePanelGroup direction="horizontal" className="gap-4">
+    <div className="h-dvh font-sans flex flex-col gap-4 px-4 sm:px-12 py-12">
+      <div className="flex h-full flex-col gap-6 border px-4 py-6 rounded-4xl">
+        <ResizablePanelGroup direction="horizontal" className="gap-4 flex-1">
           <ResizablePanel defaultSize={32}>
-            <FieldSet ref={ref}>
-              <span className="font-bold text-lg">Description Generator</span>
+            <FieldSet ref={ref} className="h-full overflow-auto">
+              <span className="font-bold text-lg">Metadata Generator</span>
               <FieldGroup>
                 <Controller
                   control={form.control}
@@ -229,7 +229,27 @@ export default function Home() {
                   )}
                 />
               </FieldGroup>
-              <Field>
+              <Field className="mt-auto mb-0">
+                <Button
+                  disabled={!form.formState.isDirty}
+                  type="button"
+                  onClick={() => {
+                    copyToClipboard("result", "Description");
+                  }}
+                >
+                  Copy Description
+                  <Copy />
+                </Button>
+                <Button
+                  disabled={!tagsGenerated || tagsGenerationLoading}
+                  type="button"
+                  onClick={() => {
+                    copyToClipboard("tags-generated", "Tags");
+                  }}
+                >
+                  Copy Tags
+                  <Copy />
+                </Button>
                 <Button
                   disabled={!form.formState.isDirty}
                   variant="destructive"
@@ -239,7 +259,7 @@ export default function Home() {
                     clearTagsGenerated();
                   }}
                 >
-                  Reset
+                  Reset All
                   <RefreshCcw />
                 </Button>
               </Field>
@@ -247,8 +267,11 @@ export default function Home() {
           </ResizablePanel>
           <ResizableHandle />
           <ResizablePanel defaultSize={68}>
-            <div style={{ height: bounds.height }} className="relative">
-              <div className="h-[calc(100%-60px)] overflow-auto pb-14 bg-muted rounded-2xl p-4 border">
+            <div
+              style={{ height: bounds.height }}
+              className="relative flex flex-col gap-4"
+            >
+              <div className="flex-4 overflow-auto pb-14 bg-muted rounded-2xl p-4 border">
                 <p className="text-base" id="result">
                   🎹 {TITLE ? TITLE : "[TITLE]"} – Piano Cover |{" "}
                   {ARTISTS ? ARTISTS : "[ARTIST(S)]"}
@@ -293,19 +316,20 @@ export default function Home() {
                   </a>
                   <br />
                   <br />
-                  👨‍🏫 WANT TO LEARN THIS ARRANGEMENT?
-                  <br />
-                  Watch the piano tutorial / walkthrough here:
-                  <br />
-                  👉{" "}
-                  <a
-                    target="_blank"
-                    href={WALKTHROUGHLINK ? WALKTHROUGHLINK : "[LINK]"}
-                  >
-                    {WALKTHROUGHLINK ? WALKTHROUGHLINK : "[LINK]"}
-                  </a>
-                  <br />
-                  <br />
+                  {WALKTHROUGHLINK ? (
+                    <>
+                      👨‍🏫 WANT TO LEARN THIS ARRANGEMENT?
+                      <br />
+                      Watch the piano tutorial / walkthrough here:
+                      <br />
+                      👉{" "}
+                      <a target="_blank" href={WALKTHROUGHLINK}>
+                        {WALKTHROUGHLINK}
+                      </a>
+                      <br />
+                      <br />
+                    </>
+                  ) : null}
                   🎵 ABOUT THIS PIANO ARRANGEMENT
                   <br />
                   Instrument: Solo Piano
@@ -403,94 +427,78 @@ export default function Home() {
                   #SheetMusic
                 </p>
               </div>
-              <Button
-                className="w-full absolute bottom-0 left-0 "
-                disabled={!form.formState.isDirty}
-                type="button"
-                onClick={() => {
-                  copyToClipboard("result", "Description");
-                }}
-              >
-                Copy Description
-                <Copy />
-              </Button>
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-        <div className="flex flex-col gap-4 place-items-start overflow-hidden bg-muted p-4 rounded-2xl border">
-          <div className="flex gap-4 justify-between w-full">
-            <span className="font-bold text-lg">Tags Generator</span>
-            <ButtonGroup className="rounded-3xl">
-              <Button
-                disabled={tagsGenerationLoading || !form.formState.isDirty}
-                onClick={() => {
-                  const text = document.getElementById("result")?.innerText;
-                  generateTags(`Generate SEO-optimized YouTube tags for a video with the following details:
+              <div className="flex-1 flex flex-col gap-4 place-items-start overflow-hidden bg-muted p-4 rounded-2xl border">
+                <div className="flex gap-4 justify-between w-full">
+                  <span className="font-bold text-lg">Tags Generator</span>
+                  <ButtonGroup className="rounded-3xl">
+                    <Button
+                      disabled={
+                        tagsGenerationLoading || !form.formState.isDirty
+                      }
+                      onClick={() => {
+                        const text =
+                          document.getElementById("result")?.innerText;
+                        generateTags(`Generate SEO-optimized YouTube tags for a video with the following details:
 
              Title: ${TITLE} – Piano Cover | ${ARTISTS} (Sheet Music)
              Description: ${text}
              
              Ensure tags include a mix of broad category terms and specific long-tail keywords in small caps only except with titles and artist names. Also, always add "john rod dondoyano". No duplications please. No more than 500 characters but not less than 400 characters overall.`);
-                }}
-              >
-                {tagsGenerationLoading ? (
-                  <>
-                    Generating Tags <RefreshCcw className="animate-spin" />
-                  </>
-                ) : (
-                  <>
-                    {tagsGenerated ? "Regenerate" : "Generate"} Tags{" "}
-                    <RefreshCcw />
-                  </>
-                )}
-              </Button>
-              <ButtonGroupSeparator />
-              <Button
-                disabled={!tagsGenerated || tagsGenerationLoading}
-                type="button"
-                onClick={() => {
-                  copyToClipboard("tags-generated", "Tags");
-                }}
-                size="icon"
-              >
-                <Copy />
-              </Button>
-              <ButtonGroupSeparator />
-              <Button
-                disabled={!tagsGenerated || tagsGenerationLoading}
-                onClick={() => clearTagsGenerated()}
-                variant="destructive"
-                size="icon"
-              >
-                <X />
-              </Button>
-            </ButtonGroup>
-          </div>
+                      }}
+                    >
+                      {tagsGenerationLoading ? (
+                        <>
+                          Generating Tags{" "}
+                          <RefreshCcw className="animate-spin" />
+                        </>
+                      ) : (
+                        <>
+                          {tagsGenerated ? "Regenerate" : "Generate"} Tags{" "}
+                          <RefreshCcw />
+                        </>
+                      )}
+                    </Button>
+                    <ButtonGroupSeparator />
+                    <Button
+                      disabled={!tagsGenerated || tagsGenerationLoading}
+                      onClick={() => clearTagsGenerated()}
+                      variant="destructive"
+                      size="icon"
+                    >
+                      <X />
+                    </Button>
+                  </ButtonGroup>
+                </div>
 
-          {tagsGenerated ? (
-            <div className="space-y-4">
-              <p id="tags-generated" hidden>
-                {tagsGenerated.tags?.map((tag, i) => (
-                  <span key={`${tag?.tag}-${i}`}>
-                    {tag?.tag}
-                    {(tagsGenerated.tags?.length ?? 0) - 1 !== i ? ", " : null}
-                  </span>
-                ))}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {tagsGenerated.tags?.map((tag, i) => (
-                  <Badge
-                    className="text-sm px-3 py-1"
-                    variant="outline"
-                    key={`${tag?.tag}-${i}-badge`}
-                  >
-                    {tag?.tag}
-                  </Badge>
-                ))}
+                {tagsGenerated ? (
+                  <div className="space-y-4">
+                    <p id="tags-generated" hidden>
+                      {tagsGenerated.tags?.map((tag, i) => (
+                        <span key={`${tag?.tag}-${i}`}>
+                          {tag?.tag}
+                          {(tagsGenerated.tags?.length ?? 0) - 1 !== i
+                            ? ", "
+                            : null}
+                        </span>
+                      ))}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {tagsGenerated.tags?.map((tag, i) => (
+                        <Badge
+                          className="text-sm px-3 py-1"
+                          variant="outline"
+                          key={`${tag?.tag}-${i}-badge`}
+                        >
+                          {tag?.tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
-          ) : null}
-        </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
     </div>
   );
