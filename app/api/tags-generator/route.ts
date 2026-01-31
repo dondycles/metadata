@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   // const { videoDescription, videoTitle } = await req.json();
   const prompt = await req.json();
   const result = streamObject({
-    model: "google/gemini-3-flash",
+    model: "openai/gpt-5.1-instant",
     schema: TagSchema,
     prompt,
   });

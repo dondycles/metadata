@@ -435,7 +435,7 @@ export default function Home() {
                   #SheetMusic
                 </p>
               </div>
-              <div className="flex-1 flex flex-col gap-4 place-items-start overflow-hidden bg-muted p-4 rounded-2xl border">
+              <div className="flex-1 flex flex-col gap-4 place-items-start overflow-auto bg-muted p-4 rounded-2xl border">
                 <div className="flex gap-4 justify-between w-full">
                   <span className="font-bold text-lg">Tags</span>
                   <ButtonGroup className="rounded-3xl">
