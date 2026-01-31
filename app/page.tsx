@@ -9,7 +9,7 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Copy, RefreshCcw, X } from "lucide-react";
+import { Ban, Copy, RefreshCcw, StopCircle, X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,6 +50,7 @@ export default function Home() {
     submit: generateTags,
     isLoading: tagsGenerationLoading,
     clear: clearTagsGenerated,
+    stop: stopTagsGeneration,
   } = experimental_useObject({
     api: "/api/tags-generator",
     schema: TagSchema,
@@ -466,15 +467,31 @@ export default function Home() {
                         </>
                       )}
                     </Button>
-                    <ButtonGroupSeparator />
-                    <Button
-                      disabled={!tagsGenerated || tagsGenerationLoading}
-                      onClick={() => clearTagsGenerated()}
-                      variant="destructive"
-                      size="icon"
-                    >
-                      <X />
-                    </Button>
+                    {tagsGenerated ? (
+                      <>
+                        <ButtonGroupSeparator />
+                        <Button
+                          disabled={!tagsGenerated || tagsGenerationLoading}
+                          onClick={() => clearTagsGenerated()}
+                          variant="destructive"
+                          size="icon"
+                        >
+                          <X />
+                        </Button>
+                      </>
+                    ) : null}
+                    {tagsGenerationLoading ? (
+                      <>
+                        <ButtonGroupSeparator />
+                        <Button
+                          onClick={() => stopTagsGeneration()}
+                          variant="destructive"
+                          size="icon"
+                        >
+                          <Ban />
+                        </Button>
+                      </>
+                    ) : null}
                   </ButtonGroup>
                 </div>
 
