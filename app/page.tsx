@@ -578,8 +578,8 @@ function Header({
   btns: () => React.ReactElement;
 }) {
   return (
-    <div className="grid grid-cols-1">
-      <header className="font-bold text-lg sticky top-0 left-0 border-b p-4  backdrop-blur-sm bg-background/50 flex justify-between gap-4 items-center">
+    <div className="grid grid-cols-1  sticky top-0 left-0 z-10">
+      <header className="font-bold text-lg border-b p-4 backdrop-blur-sm bg-background/50 flex justify-between gap-4 items-center">
         <h2 className="truncate">{title}</h2>
         {btns()}
       </header>
@@ -590,7 +590,7 @@ function Header({
 function Panel({ children }: { children: React.ReactNode }) {
   return (
     <div className="h-full flex rounded-2xl border overflow-hidden">
-      <ScrollArea className="h-full w-full">{children}</ScrollArea>
+      <ScrollArea className="h-full w-full relative">{children}</ScrollArea>
     </div>
   );
 }
