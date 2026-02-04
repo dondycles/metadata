@@ -97,144 +97,150 @@ export default function Home() {
       <div className="flex h-full flex-col gap-6 border px-4 py-6 rounded-4xl">
         <ResizablePanelGroup direction="horizontal" className="gap-4 flex-1">
           <ResizablePanel defaultSize={20}>
-            <FieldSet ref={ref} className="h-full overflow-auto">
-              <span className="font-bold text-lg">Metadata Generator</span>
-              <FieldGroup>
-                <Controller
-                  control={form.control}
-                  name="title"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Title</FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'A Thousand Years'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="artists"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Artist(s)</FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'Christina Perri'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="sheetCode"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        mymusicfive Code
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'123456'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                      <MMFPreview code={field.value} />
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="midiCode"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>PayHip Code</FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'aBxDe'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                      <PayhipPreview code={field.value} />
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="walkthroughCode"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Walkthrough Code
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'ijaoxf5x8Xw'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="difficulty"
-                  render={({ field, fieldState }) => (
-                    <Field
-                      orientation="responsive"
-                      data-invalid={fieldState.invalid}
-                    >
-                      <FieldLabel htmlFor="form-rhf-select-language">
-                        Difficulty
-                      </FieldLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger
-                          id="form-rhf-select-language"
+            <div ref={ref} className="flex flex-col h-full gap-6">
+              <FieldSet className="h-full overflow-auto flex-1">
+                <span className="font-bold text-lg">Metadata Generator</span>
+                <FieldGroup>
+                  <Controller
+                    control={form.control}
+                    name="title"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>Title</FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'A Thousand Years'"
+                          {...field}
                           aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="artists"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>Artist(s)</FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'Christina Perri'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="sheetCode"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          mymusicfive Code
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'123456'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                        <MMFPreview code={field.value} />
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    control={form.control}
+                    name="midiCode"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          PayHip Code
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'aBxDe'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                        <PayhipPreview code={field.value} />
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="walkthroughCode"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Walkthrough Code
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'ijaoxf5x8Xw'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="difficulty"
+                    render={({ field, fieldState }) => (
+                      <Field
+                        orientation="responsive"
+                        data-invalid={fieldState.invalid}
+                      >
+                        <FieldLabel htmlFor="form-rhf-select-language">
+                          Difficulty
+                        </FieldLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          onValueChange={field.onChange}
                         >
-                          <SelectValue placeholder="Select" />
-                        </SelectTrigger>
-                        <SelectContent position="item-aligned">
-                          {["Beginner", "Intermediate", "Advanced"].map((d) => (
-                            <SelectItem
-                              className="capitalize"
-                              key={d}
-                              value={d}
-                            >
-                              {d}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
+                          <SelectTrigger
+                            id="form-rhf-select-language"
+                            aria-invalid={fieldState.invalid}
+                          >
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                          <SelectContent position="item-aligned">
+                            {["Beginner", "Intermediate", "Advanced"].map(
+                              (d) => (
+                                <SelectItem
+                                  className="capitalize"
+                                  key={d}
+                                  value={d}
+                                >
+                                  {d}
+                                </SelectItem>
+                              ),
+                            )}
+                          </SelectContent>
+                        </Select>
+                      </Field>
+                    )}
+                  />
+                </FieldGroup>
+              </FieldSet>
               <Field className="mt-auto mb-0">
                 <Button
                   disabled={!form.formState.isDirty}
@@ -269,7 +275,7 @@ export default function Home() {
                   <RefreshCcw />
                 </Button>
               </Field>
-            </FieldSet>
+            </div>
           </ResizablePanel>
           <ResizableHandle />
           <ResizablePanel defaultSize={80}>

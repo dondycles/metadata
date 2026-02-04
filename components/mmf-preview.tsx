@@ -55,7 +55,7 @@ export default function MMFPreview({ code }: { code?: string }) {
       alt={data.title}
       width={720}
       height={1080}
-      className="rounded-lg border aspect-auto w-full"
+      className="rounded-lg border aspect-video w-full object-cover object-top"
     />
   );
 }

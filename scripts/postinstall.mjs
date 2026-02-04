@@ -2,7 +2,6 @@ import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { existsSync } from "node:fs";
-import chromium from "@sparticuz/chromium";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = dirname(__dirname);
@@ -12,39 +11,14 @@ async function main() {
     console.log("📦 Starting postinstall script...");
 
     // Resolve chromium package location
-    const executablePath = await chromium.executablePath();
-    if (!executablePath) {
-      console.log("⚠️  No executable path found, skipping archive creation");
-      return;
-    }
+    const chromiumResolvedPath = import.meta.resolve("@sparticuz/chromium");
 
-    // On Windows, the path might not have file:// prefix if returned directly by the lib
-    const chromiumPath =
-      typeof executablePath === "string"
-        ? executablePath.replace(/^file:\/\//, "")
-        : "";
+    // Convert file:// URL to regular path
+    const chromiumPath = chromiumResolvedPath.replace(/^file:\/\//, "");
 
-    if (!chromiumPath) {
-      console.log("⚠️  Could not resolve a valid chromium path");
-      return;
-    }
-
-    // The executable is usually in a deep subdirectory, we need to find the 'bin' directory
-    // or just the package root. For @sparticuz/chromium, the bin folder is what we want.
-    // Let's try to find the 'bin' directory relative to the executable or package.
-    let binDir = "";
-    if (chromiumPath.includes("node_modules")) {
-      const pkgRoot =
-        chromiumPath.split("node_modules")[0] +
-        "node_modules/@sparticuz/chromium";
-      binDir = join(pkgRoot, "bin");
-    } else {
-      // Fallback: try to navigate up from the executable path
-      binDir = join(dirname(chromiumPath), "bin");
-      if (!existsSync(binDir)) {
-        binDir = dirname(chromiumPath); // Use the directory containing the executable
-      }
-    }
+    // Get the package root directory (goes up from build/esm/index.js to package root)
+    const chromiumDir = dirname(dirname(dirname(chromiumPath)));
+    const binDir = join(chromiumDir, "bin");
 
     if (!existsSync(binDir)) {
       console.log(
