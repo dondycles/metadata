@@ -2,6 +2,7 @@ import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { existsSync } from "node:fs";
+import chromium from "@sparticuz/chromium";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = dirname(__dirname);
@@ -11,7 +12,7 @@ async function main() {
     console.log("📦 Starting postinstall script...");
 
     // Resolve chromium package location
-    const chromiumResolvedPath = import.meta.resolve("@sparticuz/chromium");
+    const chromiumResolvedPath = chromium.executablePath();
 
     // Convert file:// URL to regular path
     const chromiumPath = chromiumResolvedPath.replace(/^file:\/\//, "");
