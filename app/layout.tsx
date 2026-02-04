@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Google_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { ReactScan } from "@/components/react-scan";
 
 const googleSans = Google_Sans({
   variable: "--font-google-sans",
@@ -21,6 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <ReactScan />
       <body className={`${googleSans.variable} antialiased`}>
         {children}
         <Toaster richColors />
