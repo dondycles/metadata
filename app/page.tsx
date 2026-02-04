@@ -10,7 +10,13 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Ban, Copy, RefreshCcw, X } from "lucide-react";
-import { Control, Controller, useForm, useWatch } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  useForm,
+  UseFormReturn,
+  useWatch,
+} from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -46,9 +52,17 @@ import {
 } from "@/components/ui/button-group";
 import MMFPreview from "@/components/mmf-preview";
 import PayhipPreview from "@/components/payhip-preview";
-import { memo, RefObject, useCallback, useRef } from "react";
+import {
+  memo,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
+import useMeasure from "react-use-measure";
 
 export default function Home() {
   const {
@@ -104,12 +118,14 @@ export default function Home() {
     copyToClipboard(TAGS, "Tags");
   }, [copyToClipboard]);
 
+  const [isMobile, setIsMobile] = useState(false);
+
   return (
-    <div className="h-dvh font-sans flex flex-col gap-8 p-8 *:max-w-6xl *:mx-auto">
+    <Container setIsMobile={setIsMobile}>
       <h1 className="text-2xl font-bold">Metadata Generator</h1>
-      <ResizablePanelGroup direction="horizontal" className="gap-2 flex-1 ">
-        <ResizablePanel defaultSize={30} minSize={30}>
-          <Panel>
+      {isMobile ? (
+        <div className="space-y-4 [&>div]:h-auto">
+          <Panel data-slot="fields">
             <Header
               title="Fields"
               btns={() => (
@@ -264,51 +280,249 @@ export default function Home() {
               </FieldGroup>
             </FieldSet>
           </Panel>
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel defaultSize={70} minSize={30}>
-          <ResizablePanelGroup direction="vertical" className="gap-2">
-            <ResizablePanel defaultSize={75} minSize={25}>
-              <Panel>
-                <Header
-                  title="Description"
-                  btns={() => (
-                    <Button
-                      disabled={!form.formState.isDirty}
-                      type="button"
-                      onClick={handleCopyDescription}
-                    >
-                      Copy Description
-                      <Copy />
-                    </Button>
-                  )}
-                />
-                <DescriptionPreview
-                  control={form.control}
-                  descriptionRef={DESCRIPTION}
-                />
-              </Panel>
-            </ResizablePanel>
-            <ResizableHandle />
-            <ResizablePanel defaultSize={25} minSize={25}>
-              <Panel>
-                <TagsPanel
-                  control={form.control}
-                  descriptionRef={DESCRIPTION}
-                  tagsRef={TAGS}
-                  tagsGenerated={tagsGenerated}
-                  tagsGenerationLoading={tagsGenerationLoading}
-                  generateTags={generateTags}
-                  stopTagsGeneration={stopTagsGeneration}
-                  clearTagsGenerated={clearTagsGenerated}
-                  isDirty={form.formState.isDirty}
-                  onCopyTags={handleCopyTags}
-                />
-              </Panel>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+          <Panel data-slot="description">
+            <Header
+              title="Description"
+              btns={() => (
+                <Button
+                  disabled={!form.formState.isDirty}
+                  type="button"
+                  onClick={handleCopyDescription}
+                >
+                  Copy Description
+                  <Copy />
+                </Button>
+              )}
+            />
+            <DescriptionPreview
+              control={form.control}
+              descriptionRef={DESCRIPTION}
+            />
+          </Panel>
+          <Panel data-slot="tags">
+            <TagsPanel
+              control={form.control}
+              descriptionRef={DESCRIPTION}
+              tagsRef={TAGS}
+              tagsGenerated={tagsGenerated}
+              tagsGenerationLoading={tagsGenerationLoading}
+              generateTags={generateTags}
+              stopTagsGeneration={stopTagsGeneration}
+              clearTagsGenerated={clearTagsGenerated}
+              isDirty={form.formState.isDirty}
+              onCopyTags={handleCopyTags}
+            />
+          </Panel>
+        </div>
+      ) : (
+        <ResizablePanelGroup direction="horizontal" className="gap-2 flex-1 ">
+          <ResizablePanel defaultSize={30} minSize={30}>
+            <Panel>
+              <Header
+                title="Fields"
+                btns={() => (
+                  <Button
+                    disabled={!form.formState.isDirty}
+                    variant="destructive"
+                    type="button"
+                    onClick={handleReset}
+                  >
+                    Reset All
+                    <RefreshCcw />
+                  </Button>
+                )}
+              />
+
+              <FieldSet className="h-full flex-1 p-4">
+                <FieldGroup>
+                  <Controller
+                    control={form.control}
+                    name="title"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>Title</FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'A Thousand Years'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="artists"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>Artist(s)</FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'Christina Perri'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="sheetCode"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          mymusicfive Code
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'123456'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                        <MMFPreview code={field.value} />
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    control={form.control}
+                    name="midiCode"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          PayHip Code
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'aBxDe'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                        <PayhipPreview code={field.value} />
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="walkthroughCode"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Walkthrough Code
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'ijaoxf5x8Xw'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="difficulty"
+                    render={({ field, fieldState }) => (
+                      <Field
+                        orientation="responsive"
+                        data-invalid={fieldState.invalid}
+                      >
+                        <FieldLabel htmlFor="form-rhf-select-language">
+                          Difficulty
+                        </FieldLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger
+                            id="form-rhf-select-language"
+                            aria-invalid={fieldState.invalid}
+                          >
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                          <SelectContent position="item-aligned">
+                            {["Beginner", "Intermediate", "Advanced"].map(
+                              (d) => (
+                                <SelectItem
+                                  className="capitalize"
+                                  key={d}
+                                  value={d}
+                                >
+                                  {d}
+                                </SelectItem>
+                              ),
+                            )}
+                          </SelectContent>
+                        </Select>
+                      </Field>
+                    )}
+                  />
+                </FieldGroup>
+              </FieldSet>
+            </Panel>
+          </ResizablePanel>
+          <ResizableHandle />
+          <ResizablePanel defaultSize={70} minSize={30}>
+            <ResizablePanelGroup direction="vertical" className="gap-2">
+              <ResizablePanel defaultSize={75} minSize={25}>
+                <Panel>
+                  <Header
+                    title="Description"
+                    btns={() => (
+                      <Button
+                        disabled={!form.formState.isDirty}
+                        type="button"
+                        onClick={handleCopyDescription}
+                      >
+                        Copy Description
+                        <Copy />
+                      </Button>
+                    )}
+                  />
+                  <DescriptionPreview
+                    control={form.control}
+                    descriptionRef={DESCRIPTION}
+                  />
+                </Panel>
+              </ResizablePanel>
+              <ResizableHandle />
+              <ResizablePanel defaultSize={25} minSize={25}>
+                <Panel>
+                  <TagsPanel
+                    control={form.control}
+                    descriptionRef={DESCRIPTION}
+                    tagsRef={TAGS}
+                    tagsGenerated={tagsGenerated}
+                    tagsGenerationLoading={tagsGenerationLoading}
+                    generateTags={generateTags}
+                    stopTagsGeneration={stopTagsGeneration}
+                    clearTagsGenerated={clearTagsGenerated}
+                    isDirty={form.formState.isDirty}
+                    onCopyTags={handleCopyTags}
+                  />
+                </Panel>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      )}
+
       <footer className="text-center text-sm text-muted-foreground">
         <Link
           href="https://dondycles.com"
@@ -318,9 +532,258 @@ export default function Home() {
           <p>created by dondycles</p>
         </Link>
       </footer>
-    </div>
+    </Container>
   );
 }
+
+const DesktopView = memo(function DesktopView({
+  form,
+  handleReset,
+  DESCRIPTION,
+  TAGS,
+  tagsGenerated,
+  tagsGenerationLoading,
+  generateTags,
+  stopTagsGeneration,
+  clearTagsGenerated,
+  handleCopyTags,
+  handleCopyDescription,
+}: {
+  form: UseFormReturn<z.infer<typeof formSchema>>;
+  handleReset: () => void;
+  DESCRIPTION: React.RefObject<HTMLParagraphElement | null>;
+  TAGS: React.RefObject<HTMLParagraphElement | null>;
+  tagsGenerated: string[];
+  tagsGenerationLoading: boolean;
+  generateTags: () => void;
+  stopTagsGeneration: () => void;
+  clearTagsGenerated: () => void;
+  handleCopyTags: () => void;
+  handleCopyDescription: () => void;
+}) {
+  return (
+    <ResizablePanelGroup direction="horizontal" className="gap-2 flex-1 ">
+      <ResizablePanel defaultSize={30} minSize={30}>
+        <Panel>
+          <Header
+            title="Fields"
+            btns={() => (
+              <Button
+                disabled={!form.formState.isDirty}
+                variant="destructive"
+                type="button"
+                onClick={handleReset}
+              >
+                Reset All
+                <RefreshCcw />
+              </Button>
+            )}
+          />
+
+          <FieldSet className="h-full flex-1 p-4">
+            <FieldGroup>
+              <Controller
+                control={form.control}
+                name="title"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Title</FieldLabel>
+                    <Input
+                      id={field.name}
+                      placeholder="'A Thousand Years'"
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="artists"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Artist(s)</FieldLabel>
+                    <Input
+                      id={field.name}
+                      placeholder="'Christina Perri'"
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="sheetCode"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>
+                      mymusicfive Code
+                    </FieldLabel>
+                    <Input
+                      id={field.name}
+                      placeholder="'123456'"
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                    <MMFPreview code={field.value} />
+                  </Field>
+                )}
+              />
+
+              <Controller
+                control={form.control}
+                name="midiCode"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>PayHip Code</FieldLabel>
+                    <Input
+                      id={field.name}
+                      placeholder="'aBxDe'"
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                    <PayhipPreview code={field.value} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="walkthroughCode"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>
+                      Walkthrough Code
+                    </FieldLabel>
+                    <Input
+                      id={field.name}
+                      placeholder="'ijaoxf5x8Xw'"
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="difficulty"
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldLabel htmlFor="form-rhf-select-language">
+                      Difficulty
+                    </FieldLabel>
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        id="form-rhf-select-language"
+                        aria-invalid={fieldState.invalid}
+                      >
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent position="item-aligned">
+                        {["Beginner", "Intermediate", "Advanced"].map((d) => (
+                          <SelectItem className="capitalize" key={d} value={d}>
+                            {d}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldSet>
+        </Panel>
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={70} minSize={30}>
+        <ResizablePanelGroup direction="vertical" className="gap-2">
+          <ResizablePanel defaultSize={75} minSize={25}>
+            <Panel>
+              <Header
+                title="Description"
+                btns={() => (
+                  <Button
+                    disabled={!form.formState.isDirty}
+                    type="button"
+                    onClick={handleCopyDescription}
+                  >
+                    Copy Description
+                    <Copy />
+                  </Button>
+                )}
+              />
+              <DescriptionPreview
+                control={form.control}
+                descriptionRef={DESCRIPTION}
+              />
+            </Panel>
+          </ResizablePanel>
+          <ResizableHandle />
+          <ResizablePanel defaultSize={25} minSize={25}>
+            <Panel>
+              <TagsPanel
+                control={form.control}
+                descriptionRef={DESCRIPTION}
+                tagsRef={TAGS}
+                tagsGenerated={tagsGenerated}
+                tagsGenerationLoading={tagsGenerationLoading}
+                generateTags={generateTags}
+                stopTagsGeneration={stopTagsGeneration}
+                clearTagsGenerated={clearTagsGenerated}
+                isDirty={form.formState.isDirty}
+                onCopyTags={handleCopyTags}
+              />
+            </Panel>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  );
+});
+
+const Container = memo(function Container({
+  children,
+  setIsMobile,
+}: {
+  children: React.ReactNode;
+  setIsMobile: (isMobile: boolean) => void;
+}) {
+  const [ref, { width }] = useMeasure();
+
+  useEffect(() => {
+    setIsMobile(width < 800);
+  }, [width, setIsMobile]);
+  return (
+    <div
+      ref={ref}
+      className="h-dvh font-sans flex flex-col gap-8 p-8 *:max-w-6xl *:mx-auto overflow-auto"
+    >
+      {children}
+    </div>
+  );
+});
 
 // Isolated component that watches form values - only this re-renders on input change
 const DescriptionPreview = memo(function DescriptionPreview({
@@ -632,9 +1095,12 @@ function Header({
   );
 }
 
-function Panel({ children }: { children: React.ReactNode }) {
+function Panel({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & { children: React.ReactNode }) {
   return (
-    <div className="h-full flex rounded-2xl border overflow-hidden">
+    <div className="h-full flex rounded-2xl border overflow-hidden" {...props}>
       <ScrollArea className="h-full w-full relative">{children}</ScrollArea>
     </div>
   );

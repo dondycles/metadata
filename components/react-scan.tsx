@@ -9,7 +9,6 @@ export function ReactScan(): JSX.Element {
   useEffect(() => {
     scan({
       enabled: true,
-      showToolbar: true,
     });
   }, []);
 
