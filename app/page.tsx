@@ -37,11 +37,14 @@ const formSchema = z.object({
 });
 import useMeasure from "react-use-measure";
 import { Badge } from "@/components/ui/badge";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   ButtonGroup,
   ButtonGroupSeparator,
 } from "@/components/ui/button-group";
+import Embed from "@/components/embed";
+import MMFPreview from "@/components/mmf-preview";
+import PayhipPreview from "@/components/payhip-preview";
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [ref, bounds] = useMeasure();
@@ -93,7 +96,7 @@ export default function Home() {
     <div className="h-dvh font-sans flex flex-col gap-4 px-4 sm:px-12 py-12">
       <div className="flex h-full flex-col gap-6 border px-4 py-6 rounded-4xl">
         <ResizablePanelGroup direction="horizontal" className="gap-4 flex-1">
-          <ResizablePanel defaultSize={32}>
+          <ResizablePanel defaultSize={20}>
             <FieldSet ref={ref} className="h-full overflow-auto">
               <span className="font-bold text-lg">Metadata Generator</span>
               <FieldGroup>
@@ -150,6 +153,7 @@ export default function Home() {
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
                       )}
+                      <MMFPreview code={field.value} />
                     </Field>
                   )}
                 />
@@ -169,6 +173,7 @@ export default function Home() {
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
                       )}
+                      <PayhipPreview code={field.value} />
                     </Field>
                   )}
                 />
@@ -267,7 +272,7 @@ export default function Home() {
             </FieldSet>
           </ResizablePanel>
           <ResizableHandle />
-          <ResizablePanel defaultSize={68}>
+          <ResizablePanel defaultSize={80}>
             <div
               style={{ height: bounds.height }}
               className="relative flex flex-col gap-4"
@@ -494,7 +499,6 @@ export default function Home() {
                     ) : null}
                   </ButtonGroup>
                 </div>
-
                 {tagsGenerated ? (
                   <div className="space-y-4">
                     <p id="tags-generated" hidden>
