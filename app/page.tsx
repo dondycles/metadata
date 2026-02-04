@@ -120,10 +120,10 @@ export default function Home() {
   };
 
   return (
-    <div className="h-dvh font-sans flex flex-col gap-8 p-8 [&>*]:max-w-6xl [&>*]:mx-auto">
+    <div className="h-dvh font-sans flex flex-col gap-8 p-8 *:max-w-6xl *:mx-auto">
       <h1 className="text-2xl font-bold">Metadata Generator</h1>
       <ResizablePanelGroup direction="horizontal" className="gap-2 flex-1 ">
-        <ResizablePanel defaultSize={20}>
+        <ResizablePanel defaultSize={25} minSize={25}>
           <Panel>
             <Header
               title="Fields"
@@ -284,9 +284,9 @@ export default function Home() {
           </Panel>
         </ResizablePanel>
         <ResizableHandle />
-        <ResizablePanel defaultSize={80}>
+        <ResizablePanel defaultSize={75} minSize={25}>
           <ResizablePanelGroup direction="vertical" className="gap-2">
-            <ResizablePanel defaultSize={75}>
+            <ResizablePanel defaultSize={75} minSize={25}>
               <Panel>
                 <Header
                   title="Description"
@@ -464,7 +464,7 @@ export default function Home() {
               </Panel>
             </ResizablePanel>
             <ResizableHandle />
-            <ResizablePanel defaultSize={26}>
+            <ResizablePanel defaultSize={25} minSize={25}>
               <Panel>
                 <Header
                   title="Tags"
