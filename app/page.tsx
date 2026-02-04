@@ -36,6 +36,12 @@ const formSchema = z.object({
   difficulty: z.enum(["Beginner", "Intermediate", "Advanced"]),
 });
 import { Badge } from "@/components/ui/badge";
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile,
+} from "react-device-detect";
 
 import {
   ButtonGroup,
@@ -122,441 +128,450 @@ export default function Home() {
   return (
     <div className="h-dvh font-sans flex flex-col gap-8 p-8 *:max-w-6xl *:mx-auto">
       <h1 className="text-2xl font-bold">Metadata Generator</h1>
-      <ResizablePanelGroup direction="horizontal" className="gap-2 flex-1 ">
-        <ResizablePanel defaultSize={25} minSize={25}>
-          <Panel>
-            <Header
-              title="Fields"
-              btns={() => (
-                <Button
-                  disabled={!form.formState.isDirty}
-                  variant="destructive"
-                  type="button"
-                  onClick={() => {
-                    form.reset();
-                    clearTagsGenerated();
-                  }}
-                >
-                  Reset All
-                  <RefreshCcw />
-                </Button>
-              )}
-            />
+      <BrowserView className="flex-1">
+        <ResizablePanelGroup direction="horizontal" className="gap-2 flex-1 ">
+          <ResizablePanel defaultSize={30} minSize={30}>
+            <Panel>
+              <Header
+                title="Fields"
+                btns={() => (
+                  <Button
+                    disabled={!form.formState.isDirty}
+                    variant="destructive"
+                    type="button"
+                    onClick={() => {
+                      form.reset();
+                      clearTagsGenerated();
+                    }}
+                  >
+                    Reset All
+                    <RefreshCcw />
+                  </Button>
+                )}
+              />
 
-            <FieldSet className="h-full flex-1 p-4">
-              <FieldGroup>
-                <Controller
-                  control={form.control}
-                  name="title"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Title</FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'A Thousand Years'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="artists"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Artist(s)</FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'Christina Perri'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="sheetCode"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        mymusicfive Code
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'123456'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                      <MMFPreview code={field.value} />
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="midiCode"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>PayHip Code</FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'aBxDe'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                      <PayhipPreview code={field.value} />
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="walkthroughCode"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Walkthrough Code
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        placeholder="'ijaoxf5x8Xw'"
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="difficulty"
-                  render={({ field, fieldState }) => (
-                    <Field
-                      orientation="responsive"
-                      data-invalid={fieldState.invalid}
-                    >
-                      <FieldLabel htmlFor="form-rhf-select-language">
-                        Difficulty
-                      </FieldLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger
-                          id="form-rhf-select-language"
+              <FieldSet className="h-full flex-1 p-4">
+                <FieldGroup>
+                  <Controller
+                    control={form.control}
+                    name="title"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>Title</FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'A Thousand Years'"
+                          {...field}
                           aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="artists"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>Artist(s)</FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'Christina Perri'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="sheetCode"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          mymusicfive Code
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'123456'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                        <MMFPreview code={field.value} />
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    control={form.control}
+                    name="midiCode"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          PayHip Code
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'aBxDe'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                        <PayhipPreview code={field.value} />
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="walkthroughCode"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Walkthrough Code
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          placeholder="'ijaoxf5x8Xw'"
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="difficulty"
+                    render={({ field, fieldState }) => (
+                      <Field
+                        orientation="responsive"
+                        data-invalid={fieldState.invalid}
+                      >
+                        <FieldLabel htmlFor="form-rhf-select-language">
+                          Difficulty
+                        </FieldLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          onValueChange={field.onChange}
                         >
-                          <SelectValue placeholder="Select" />
-                        </SelectTrigger>
-                        <SelectContent position="item-aligned">
-                          {["Beginner", "Intermediate", "Advanced"].map((d) => (
-                            <SelectItem
-                              className="capitalize"
-                              key={d}
-                              value={d}
-                            >
-                              {d}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-          </Panel>
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel defaultSize={75} minSize={25}>
-          <ResizablePanelGroup direction="vertical" className="gap-2">
-            <ResizablePanel defaultSize={75} minSize={25}>
-              <Panel>
-                <Header
-                  title="Description"
-                  btns={() => (
-                    <Button
-                      disabled={!form.formState.isDirty}
-                      type="button"
-                      onClick={() => {
-                        copyToClipboard(DESCRIPTION, "Description");
-                      }}
-                    >
-                      Copy Description
-                      <Copy />
-                    </Button>
-                  )}
-                />
-                <div className="p-4">
-                  <p className="text-base break-all" ref={DESCRIPTION}>
-                    🎹 {TITLE ? TITLE : "[TITLE]"} – Piano Cover |{" "}
-                    {ARTISTS ? ARTISTS : "[ARTIST(S)]"}
-                    <br />
-                    <br />
-                    This is a solo piano cover and arrangement of{" "}
-                    {TITLE ? TITLE : "[TITLE]"} by{" "}
-                    {ARTISTS ? ARTISTS : "[ARTIST(S)]"}
-                    , created for pianists who want to learn, practice, and
-                    perform the song.
-                    <br />
-                    <br />
-                    Ideal for:
-                    <br />
-                    Piano practice
-                    <br />
-                    Performances & recitals
-                    <br />
-                    Covers & content creation
-                    <br />
-                    Learning through sheet music
-                    <br />
-                    <br />
-                    🎼 SHEET MUSIC & FILES
-                    <br />
-                    🎹 Piano Sheet Music:{" "}
-                    <a
-                      target="_blank"
-                      href={`https://sheets.jrdy.link/${MMFCODE ? MMFCODE : null}`}
-                    >
-                      https://sheets.jrdy.link/
-                      {MMFCODE ? MMFCODE : null}
-                    </a>
-                    <br />
-                    🎹 MIDI / MXL Files:{" "}
-                    <a
-                      target="_blank"
-                      href={`https://midis.jrdy.link/${PAYHIPCODE ? PAYHIPCODE : null}`}
-                    >
-                      https://midis.jrdy.link/
-                      {PAYHIPCODE ? PAYHIPCODE : null}
-                    </a>
-                    <br />
-                    <br />
-                    📩 INQUIRIES? CONTACT ME!
-                    <br />
-                    📧 johnroddondoyano8@gmail.com
-                    <br />
-                    <br />
-                    👨‍🏫 WANT TO LEARN THIS ARRANGEMENT?
-                    <br />
-                    Watch the piano tutorial / walkthrough here:
-                    <br />
-                    👉{" "}
-                    <a
-                      target="_blank"
-                      href={
-                        WALKTHROUGHLINK
+                          <SelectTrigger
+                            id="form-rhf-select-language"
+                            aria-invalid={fieldState.invalid}
+                          >
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                          <SelectContent position="item-aligned">
+                            {["Beginner", "Intermediate", "Advanced"].map(
+                              (d) => (
+                                <SelectItem
+                                  className="capitalize"
+                                  key={d}
+                                  value={d}
+                                >
+                                  {d}
+                                </SelectItem>
+                              ),
+                            )}
+                          </SelectContent>
+                        </Select>
+                      </Field>
+                    )}
+                  />
+                </FieldGroup>
+              </FieldSet>
+            </Panel>
+          </ResizablePanel>
+          <ResizableHandle />
+          <ResizablePanel defaultSize={70} minSize={30}>
+            <ResizablePanelGroup direction="vertical" className="gap-2">
+              <ResizablePanel defaultSize={75} minSize={25}>
+                <Panel>
+                  <Header
+                    title="Description"
+                    btns={() => (
+                      <Button
+                        disabled={!form.formState.isDirty}
+                        type="button"
+                        onClick={() => {
+                          copyToClipboard(DESCRIPTION, "Description");
+                        }}
+                      >
+                        Copy Description
+                        <Copy />
+                      </Button>
+                    )}
+                  />
+                  <div className="p-4">
+                    <p className="text-base break-all" ref={DESCRIPTION}>
+                      🎹 {TITLE ? TITLE : "[TITLE]"} – Piano Cover |{" "}
+                      {ARTISTS ? ARTISTS : "[ARTIST(S)]"}
+                      <br />
+                      <br />
+                      This is a solo piano cover and arrangement of{" "}
+                      {TITLE ? TITLE : "[TITLE]"} by{" "}
+                      {ARTISTS ? ARTISTS : "[ARTIST(S)]"}
+                      , created for pianists who want to learn, practice, and
+                      perform the song.
+                      <br />
+                      <br />
+                      Ideal for:
+                      <br />
+                      Piano practice
+                      <br />
+                      Performances & recitals
+                      <br />
+                      Covers & content creation
+                      <br />
+                      Learning through sheet music
+                      <br />
+                      <br />
+                      🎼 SHEET MUSIC & FILES
+                      <br />
+                      🎹 Piano Sheet Music:{" "}
+                      <a
+                        target="_blank"
+                        href={`https://sheets.jrdy.link/${MMFCODE ? MMFCODE : null}`}
+                      >
+                        https://sheets.jrdy.link/
+                        {MMFCODE ? MMFCODE : null}
+                      </a>
+                      <br />
+                      🎹 MIDI / MXL Files:{" "}
+                      <a
+                        target="_blank"
+                        href={`https://midis.jrdy.link/${PAYHIPCODE ? PAYHIPCODE : null}`}
+                      >
+                        https://midis.jrdy.link/
+                        {PAYHIPCODE ? PAYHIPCODE : null}
+                      </a>
+                      <br />
+                      <br />
+                      📩 INQUIRIES? CONTACT ME!
+                      <br />
+                      📧 johnroddondoyano8@gmail.com
+                      <br />
+                      <br />
+                      👨‍🏫 WANT TO LEARN THIS ARRANGEMENT?
+                      <br />
+                      Watch the piano tutorial / walkthrough here:
+                      <br />
+                      👉{" "}
+                      <a
+                        target="_blank"
+                        href={
+                          WALKTHROUGHLINK
+                            ? `https://youtu.be/${WALKTHROUGHLINK}`
+                            : "https://www.youtube.com/@sheetsby_jr"
+                        }
+                      >
+                        {WALKTHROUGHLINK
                           ? `https://youtu.be/${WALKTHROUGHLINK}`
-                          : "https://www.youtube.com/@sheetsby_jr"
-                      }
-                    >
-                      {WALKTHROUGHLINK
-                        ? `https://youtu.be/${WALKTHROUGHLINK}`
-                        : "https://www.youtube.com/@sheetsby_jr"}
-                    </a>
-                    <br />
-                    <br />
-                    🎵 ABOUT THIS PIANO ARRANGEMENT
-                    <br />
-                    Instrument: Solo Piano
-                    <br />
-                    Style: Piano Cover / Arrangement
-                    <br />
-                    Difficulty: {DIFFICULTY}
-                    <br />
-                    Arranged for expressive, playable performance
-                    <br />
-                    <br />
-                    🎓 LEARN PIANO (RECOMMENDED)
-                    <br />
-                    📖 Learn piano with Skoove:
-                    <br />
-                    👉 https://www.skoove.com/#a_aid=johnrod
-                    <br />
-                    🎁 Get 1 month FREE of Skoove Premium
-                    <br />
-                    Use code: JOHNROD1M
-                    <br />
-                    Sign up via the link above, apply the code, and start
-                    playing.
-                    <br />
-                    <br />
-                    🔎 WANT AN AUTOMATIC PIANO RECORDER?
-                    <br />
-                    👉 https://www.jamcorder.com
-                    <br />
-                    Use code: JOHNROD
-                    <br />
-                    <br />
-                    🌐 OFFICIAL WEBSITE
-                    <br />
-                    Visit my official website for more music and projects:
-                    <br />
-                    👉 https://www.johnroddondoyano.com
-                    <br />
-                    <br />
-                    🎧 LISTEN & FOLLOW
-                    <br />
-                    Spotify: https://spotify.jrdy.link
-                    <br />
-                    Apple Music: https://apple-music.jrdy.link
-                    <br />
-                    <br />
-                    ☕ SUPPORT
-                    <br />
-                    If you’d like to support my work:
-                    <br />
-                    👉 Buy Me A Coffee: https://www.buymeacoffee.com/johnrod
-                    <br />
-                    <br />
-                    📌 SUBSCRIBE
-                    <br />
-                    New piano covers, arrangements, and sheet music regularly.
-                    <br />
-                    <br />
-                    {TITLE?.length > 0
-                      ? TITLE.replaceAll("&", "#")
-                          .replaceAll(" ", "")
-                          .replaceAll(",", "#")
-                          .replace(/#+/g, "#")
-                          .replace(/(?!^)#/g, "\n#")
-                          .split("#")
-                          .filter(Boolean)
-                          .map((tag) => `#${tag}`)
-                          .join("\n")
-                      : null}
-                    <br />
-                    {ARTISTS?.length > 0
-                      ? ARTISTS.replaceAll("&", "#")
-                          .replaceAll(" ", "")
-                          .replaceAll(",", "#")
-                          .replace(/#+/g, "#")
-                          .replace(/(?!^)#/g, "\n#")
-                          .split("#")
-                          .filter(Boolean)
-                          .map((tag) => `#${tag}`)
-                          .join("\n")
-                      : null}
-                    <br />
-                    #PianoCover
-                    <br />
-                    #PianoArrangement
-                    <br />
-                    #SheetMusic
-                  </p>
-                </div>
-              </Panel>
-            </ResizablePanel>
-            <ResizableHandle />
-            <ResizablePanel defaultSize={25} minSize={25}>
-              <Panel>
-                <Header
-                  title="Tags"
-                  btns={() => (
-                    <ButtonGroup className="rounded-3xl">
-                      {tagsGenerationLoading ? (
-                        <>
-                          <Button disabled>
-                            Generating Tags{" "}
-                            <RefreshCcw className="animate-spin" />
-                          </Button>
-                          <ButtonGroupSeparator />
-                          <Button
-                            onClick={() => stopTagsGeneration()}
-                            variant="destructive"
-                            size="icon"
-                          >
-                            <Ban />
-                          </Button>
-                        </>
-                      ) : tagsGenerated ? (
-                        <>
-                          <Button
-                            onClick={() => {
-                              copyToClipboard(TAGS, "Tags");
-                            }}
-                          >
-                            Copy Tags
-                            <Copy />
-                          </Button>
-                          <ButtonGroupSeparator />
+                          : "https://www.youtube.com/@sheetsby_jr"}
+                      </a>
+                      <br />
+                      <br />
+                      🎵 ABOUT THIS PIANO ARRANGEMENT
+                      <br />
+                      Instrument: Solo Piano
+                      <br />
+                      Style: Piano Cover / Arrangement
+                      <br />
+                      Difficulty: {DIFFICULTY}
+                      <br />
+                      Arranged for expressive, playable performance
+                      <br />
+                      <br />
+                      🎓 LEARN PIANO (RECOMMENDED)
+                      <br />
+                      📖 Learn piano with Skoove:
+                      <br />
+                      👉 https://www.skoove.com/#a_aid=johnrod
+                      <br />
+                      🎁 Get 1 month FREE of Skoove Premium
+                      <br />
+                      Use code: JOHNROD1M
+                      <br />
+                      Sign up via the link above, apply the code, and start
+                      playing.
+                      <br />
+                      <br />
+                      🔎 WANT AN AUTOMATIC PIANO RECORDER?
+                      <br />
+                      👉 https://www.jamcorder.com
+                      <br />
+                      Use code: JOHNROD
+                      <br />
+                      <br />
+                      🌐 OFFICIAL WEBSITE
+                      <br />
+                      Visit my official website for more music and projects:
+                      <br />
+                      👉 https://www.johnroddondoyano.com
+                      <br />
+                      <br />
+                      🎧 LISTEN & FOLLOW
+                      <br />
+                      Spotify: https://spotify.jrdy.link
+                      <br />
+                      Apple Music: https://apple-music.jrdy.link
+                      <br />
+                      <br />
+                      ☕ SUPPORT
+                      <br />
+                      If you’d like to support my work:
+                      <br />
+                      👉 Buy Me A Coffee: https://www.buymeacoffee.com/johnrod
+                      <br />
+                      <br />
+                      📌 SUBSCRIBE
+                      <br />
+                      New piano covers, arrangements, and sheet music regularly.
+                      <br />
+                      <br />
+                      {TITLE?.length > 0
+                        ? TITLE.replaceAll("&", "#")
+                            .replaceAll(" ", "")
+                            .replaceAll(",", "#")
+                            .replace(/#+/g, "#")
+                            .replace(/(?!^)#/g, "\n#")
+                            .split("#")
+                            .filter(Boolean)
+                            .map((tag) => `#${tag}`)
+                            .join("\n")
+                        : null}
+                      <br />
+                      {ARTISTS?.length > 0
+                        ? ARTISTS.replaceAll("&", "#")
+                            .replaceAll(" ", "")
+                            .replaceAll(",", "#")
+                            .replace(/#+/g, "#")
+                            .replace(/(?!^)#/g, "\n#")
+                            .split("#")
+                            .filter(Boolean)
+                            .map((tag) => `#${tag}`)
+                            .join("\n")
+                        : null}
+                      <br />
+                      #PianoCover
+                      <br />
+                      #PianoArrangement
+                      <br />
+                      #SheetMusic
+                    </p>
+                  </div>
+                </Panel>
+              </ResizablePanel>
+              <ResizableHandle />
+              <ResizablePanel defaultSize={25} minSize={25}>
+                <Panel>
+                  <Header
+                    title="Tags"
+                    btns={() => (
+                      <ButtonGroup className="rounded-3xl">
+                        {tagsGenerationLoading ? (
+                          <>
+                            <Button disabled>
+                              Generating Tags{" "}
+                              <RefreshCcw className="animate-spin" />
+                            </Button>
+                            <ButtonGroupSeparator />
+                            <Button
+                              onClick={() => stopTagsGeneration()}
+                              variant="destructive"
+                              size="icon"
+                            >
+                              <Ban />
+                            </Button>
+                          </>
+                        ) : tagsGenerated ? (
+                          <>
+                            <Button
+                              onClick={() => {
+                                copyToClipboard(TAGS, "Tags");
+                              }}
+                            >
+                              Copy Tags
+                              <Copy />
+                            </Button>
+                            <ButtonGroupSeparator />
+                            <Button
+                              disabled={!form.formState.isDirty}
+                              onClick={() => {
+                                generateTags(createPrompt());
+                              }}
+                            >
+                              <RefreshCcw />
+                            </Button>
+                            <ButtonGroupSeparator />
+                            <Button
+                              onClick={() => clearTagsGenerated()}
+                              variant="destructive"
+                              size="icon"
+                            >
+                              <X />
+                            </Button>
+                          </>
+                        ) : (
                           <Button
                             disabled={!form.formState.isDirty}
                             onClick={() => {
                               generateTags(createPrompt());
                             }}
                           >
+                            Generate Tags
                             <RefreshCcw />
                           </Button>
-                          <ButtonGroupSeparator />
-                          <Button
-                            onClick={() => clearTagsGenerated()}
-                            variant="destructive"
-                            size="icon"
+                        )}
+                      </ButtonGroup>
+                    )}
+                  />
+                  {tagsGenerated ? (
+                    <div className="space-y-4 p-4">
+                      <p ref={TAGS} className="sr-only">
+                        {tagsGenerated.tags?.map((tag, i) => (
+                          <span key={`${tag?.tag}-${i}`}>
+                            {tag?.tag}
+                            {(tagsGenerated.tags?.length ?? 0) - 1 !== i
+                              ? ", "
+                              : null}
+                          </span>
+                        ))}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {tagsGenerated.tags?.map((tag, i) => (
+                          <Badge
+                            className="text-sm px-3 py-1  break-all whitespace-normal"
+                            variant="outline"
+                            key={`${tag?.tag}-${i}-badge`}
                           >
-                            <X />
-                          </Button>
-                        </>
-                      ) : (
-                        <Button
-                          disabled={!form.formState.isDirty}
-                          onClick={() => {
-                            generateTags(createPrompt());
-                          }}
-                        >
-                          Generate Tags
-                          <RefreshCcw />
-                        </Button>
-                      )}
-                    </ButtonGroup>
-                  )}
-                />
-                {tagsGenerated ? (
-                  <div className="space-y-4 p-4">
-                    <p ref={TAGS} className="sr-only">
-                      {tagsGenerated.tags?.map((tag, i) => (
-                        <span key={`${tag?.tag}-${i}`}>
-                          {tag?.tag}
-                          {(tagsGenerated.tags?.length ?? 0) - 1 !== i
-                            ? ", "
-                            : null}
-                        </span>
-                      ))}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {tagsGenerated.tags?.map((tag, i) => (
-                        <Badge
-                          className="text-sm px-3 py-1  break-all whitespace-normal"
-                          variant="outline"
-                          key={`${tag?.tag}-${i}-badge`}
-                        >
-                          {tag?.tag}
-                        </Badge>
-                      ))}
+                            {tag?.tag}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ) : null}
-              </Panel>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+                  ) : null}
+                </Panel>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </BrowserView>
+      <MobileView>
+        <p>You are on mobile</p>
+      </MobileView>
       <footer className="text-center text-sm text-muted-foreground">
         <Link
           href="https://dondycles.com"
