@@ -11,8 +11,9 @@ const googleSans = Google_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Metadata",
-  description: "Metadata",
+  title: "Metadata Generator - YouTube Music Metadata Tool",
+  description:
+    "Generate optimized YouTube metadata, descriptions, and tags for piano covers and sheet music videos. Streamline your music content workflow.",
 };
 
 export default function RootLayout({

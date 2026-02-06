@@ -58,6 +58,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import useMeasure from "react-use-measure";
+import Image from "next/image";
 
 const DIFFICULTY_OPTIONS = ["Beginner", "Intermediate", "Advanced"] as const;
 
@@ -119,7 +120,17 @@ export default function Home() {
 
   return (
     <Container setIsMobile={setIsMobile}>
-      <h1 className="text-2xl font-bold">Metadata Generator</h1>
+      <div className="flex items-center gap-2">
+        <h1 className="text-2xl font-bold">Metadata Generator</h1>
+        <Image
+          src="/favicon.png"
+          alt="Favicon"
+          width={64}
+          height={64}
+          className="mx-auto"
+        />
+      </div>
+
       {isMobile ? (
         <div className="space-y-4 [&>div]:h-auto">
           <Panel data-slot="fields">
