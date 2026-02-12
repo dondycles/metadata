@@ -83,7 +83,7 @@ export default function PayhipPreview({ code }: { code?: string }) {
       alt={code || ""}
       width={720}
       height={1080}
-      className="rounded-lg border aspect-video w-full object-cover object-top"
+      className="rounded-lg border aspect-square w-full object-contain object-top"
     />
   );
 }
