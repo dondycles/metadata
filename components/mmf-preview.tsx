@@ -2,6 +2,7 @@ import { debounce } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 
 export default function MMFPreview({ code }: { code?: string }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,11 +13,10 @@ export default function MMFPreview({ code }: { code?: string }) {
     () =>
       debounce(async (code: string) => {
         try {
-          const response = await fetch(
-            `https://mms.pd.mapia.io/mms/public/sheet/${code}`,
+          const response = await axios.get(
+            `/api/mmf?code=${encodeURIComponent(code)}`,
           );
-          const result = await response.json();
-          setData(result);
+          setData(response.data);
         } catch (error) {
           console.error("Failed to fetch metadata:", error);
           setData(null);
