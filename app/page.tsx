@@ -145,7 +145,6 @@ export default function Home() {
                 <RefreshCcw />
               </Button>
             </Header>
-
             <FieldSet className="h-full flex-1 p-4">
               <FormFields control={form.control} isMobile={true} />
             </FieldSet>
@@ -323,8 +322,8 @@ const FormFields = memo(function FormFields({
           </Field>
         )}
       />
-      <SheetCodeField control={control} isMobile={isMobile} />
-      <MidiCodeField control={control} isMobile={isMobile} />
+      <SheetCodeField control={control} />
+      <MidiCodeField control={control} />
       <Controller
         control={control}
         name="walkthroughCode"
@@ -377,10 +376,8 @@ const FormFields = memo(function FormFields({
 
 const SheetCodeField = memo(function SheetCodeField({
   control,
-  isMobile,
 }: {
   control: Control<FormValues>;
-  isMobile: boolean;
 }) {
   const handleCopyMm5 = useCallback((sheetCode: string) => {
     const copyToClipboard = async () => {
@@ -402,33 +399,25 @@ const SheetCodeField = memo(function SheetCodeField({
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={field.name}>mymusicfive Code</FieldLabel>
-          {isMobile ? (
+
+          <div className="relative">
             <Input
               id={field.name}
               placeholder="'123456'"
               {...field}
               aria-invalid={fieldState.invalid}
+              className="pr-8.5"
             />
-          ) : (
-            <div className="relative">
-              <Input
-                id={field.name}
-                placeholder="'123456'"
-                {...field}
-                aria-invalid={fieldState.invalid}
-                className="pr-8.5"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="icon-sm"
-                onClick={() => handleCopyMm5(field.value)}
-                className="absolute right-1 top-1/2 -translate-y-1/2 size-7 "
-              >
-                <Clipboard />
-              </Button>
-            </div>
-          )}
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              onClick={() => handleCopyMm5(field.value)}
+              className="absolute right-1 top-1/2 -translate-y-1/2 size-7 "
+            >
+              <Clipboard />
+            </Button>
+          </div>
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           <MMFPreview code={field.value} />
         </Field>
@@ -439,10 +428,8 @@ const SheetCodeField = memo(function SheetCodeField({
 
 const MidiCodeField = memo(function MidiCodeField({
   control,
-  isMobile,
 }: {
   control: Control<FormValues>;
-  isMobile: boolean;
 }) {
   const handleCopyPh = useCallback((midiCode: string) => {
     const copyToClipboard = async () => {
@@ -465,34 +452,26 @@ const MidiCodeField = memo(function MidiCodeField({
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={field.name}>PayHip Code</FieldLabel>
-          {isMobile ? (
+
+          <div className="relative">
             <Input
               id={field.name}
               placeholder="'aBxDe'"
               {...field}
               aria-invalid={fieldState.invalid}
+              className="pr-8.5"
             />
-          ) : (
-            <div className="relative">
-              <Input
-                id={field.name}
-                placeholder="'aBxDe'"
-                {...field}
-                aria-invalid={fieldState.invalid}
-                className="pr-8.5"
-              />
-              <Button
-                disabled={!field.value}
-                type="button"
-                variant="outline"
-                size="icon-sm"
-                onClick={() => handleCopyPh(field.value)}
-                className="absolute right-1 top-1/2 -translate-y-1/2 size-7 "
-              >
-                <Clipboard />
-              </Button>
-            </div>
-          )}
+            <Button
+              disabled={!field.value}
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              onClick={() => handleCopyPh(field.value)}
+              className="absolute right-1 top-1/2 -translate-y-1/2 size-7 "
+            >
+              <Clipboard />
+            </Button>
+          </div>
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           <PayhipPreview code={field.value} />
         </Field>
