@@ -195,7 +195,6 @@ export default function Home() {
                   <RefreshCcw />
                 </Button>
               </Header>
-
               <FieldSet className="h-full flex-1 p-4">
                 <FormFields control={form.control} isMobile={false} />
               </FieldSet>
@@ -539,7 +538,8 @@ const DescriptionPreview = memo(function DescriptionPreview({
   return (
     <div className="p-4">
       <p className="text-base break-all" ref={descriptionRef}>
-        🎹 {title || "[TITLE]"} – Piano Cover | {artists || "[ARTIST(S)]"}
+        🎹 {title || "[TITLE]"} – Piano Cover | {artists || "[ARTIST(S)]"}{" "}
+        (Piano Sheet)
         <br />
         <br />
         This is a solo piano cover and arrangement of {title ||
@@ -571,12 +571,21 @@ const DescriptionPreview = memo(function DescriptionPreview({
         </a>
         <br />
         <br />
+        🎓 LEARN PIANO WITH mymusic5 App (RECOMMENDED)
+        <br />
+        📖 An AI music app that automatically turns your sheet music pages
+        <br />
+        👉 https://link.mymusic5.com/omcxmw
+        <br />
+        30% off sheet music for new sign-ups
+        <br />
+        <br />
         📩 INQUIRIES? CONTACT ME!
         <br />
         📧 johnroddondoyano8@gmail.com
         <br />
         <br />
-        👨🏫 WANT TO LEARN THIS ARRANGEMENT?
+        🏫 WANT TO LEARN THIS ARRANGEMENT?
         <br />
         Watch the piano tutorial / walkthrough here:
         <br />
@@ -595,19 +604,6 @@ const DescriptionPreview = memo(function DescriptionPreview({
         Difficulty: {difficulty}
         <br />
         Arranged for expressive, playable performance
-        <br />
-        <br />
-        🎓 LEARN PIANO (RECOMMENDED)
-        <br />
-        📖 Learn piano with Skoove:
-        <br />
-        👉 https://www.skoove.com/#a_aid=johnrod
-        <br />
-        🎁 Get 1 month FREE of Skoove Premium
-        <br />
-        Use code: JOHNROD1M
-        <br />
-        Sign up via the link above, apply the code, and start playing.
         <br />
         <br />
         🔎 WANT AN AUTOMATIC PIANO RECORDER?
