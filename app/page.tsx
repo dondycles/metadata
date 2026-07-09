@@ -573,7 +573,8 @@ const DescriptionPreview = memo(function DescriptionPreview({
         <br />
         🎓 LEARN PIANO WITH mymusic5 App (RECOMMENDED)
         <br />
-        📖 An AI music app that automatically turns your sheet music pages
+        📖 The mymusic5 app has all of my sheets, and it has an AI teacher to
+        help you learn them easily!
         <br />
         👉 https://link.mymusic5.com/omcxmw
         <br />
