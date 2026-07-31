@@ -644,6 +644,8 @@ const DescriptionPreview = memo(function DescriptionPreview({
         <br />
         {artistTags}
         <br />
+        #MyMusic5
+        <br />
         #PianoCover
         <br />
         #PianoArrangement
