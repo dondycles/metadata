@@ -691,7 +691,7 @@ const TagsPanel = memo(function TagsPanel({
   Title: ${title} – Piano Cover | ${artists} (Sheet Music)
   Description: ${descriptionRef.current?.innerText}
   
-  Ensure tags include a mix of broad category terms and specific long-tail keywords in small caps only except with titles and artist names. Also, always add "john rod dondoyano". No duplications please. No more than 500 characters but not less than 400 characters overall.`,
+  Ensure tags include a mix of broad category terms and specific long-tail keywords in small caps only except with titles and artist names. You can also add trending related tags. Also, always add "john rod dondoyano" and "mymusic5". No duplications please. Make it exact 500 characters if possible!`,
     [title, artists, descriptionRef],
   );
 
